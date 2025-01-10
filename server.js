@@ -3,6 +3,9 @@ const dotenv =require ('dotenv')
 const morgan =require ('morgan')
 const cors =require ('cors')
 const helmet =require ('helmet')
+const connection = require('./config/db')
+const authRoute = require('./routes/authRoutes.js')
+
 
 dotenv.config()
 
@@ -15,6 +18,9 @@ app.use(helmet())
 
 const PORT = process.env.PORT 
 
-app.listen(PORT,()=>{
-    console.log(`Server running on ${PORT}`);
-})
+connection()
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+
