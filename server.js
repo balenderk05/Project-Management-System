@@ -16,6 +16,7 @@ app.use(cors())
 app.use(morgan("dev"))
 app.use(helmet())
 
+app.use("/api/user", authRoute)
 const PORT = process.env.PORT 
 
 connection()
