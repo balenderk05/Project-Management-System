@@ -1,20 +1,20 @@
-const { Sequelize } = require('sequelize');
-const config = require('./config.json');
-const dbconfig = config.development;
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
+const config = require('../config/config.json');
 
-const connection = async () => {
-    const sequelize = new Sequelize(dbconfig.database, dbconfig.username, dbconfig.password, {
-        host: dbconfig.host,
-        dialect: dbconfig.dialect
-    });
+// const environment = process.env.NODE_ENV || 'development'; 
+const dbConfig = config.development;
 
-    try {
-        // Authenticate connection
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-}
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+  });
 
-module.exports = connection;
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+})();
