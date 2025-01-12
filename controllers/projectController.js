@@ -1,22 +1,24 @@
-const { Project } = require("../models");
-const user = require("../models/user");
+const { Project,User } = require("../models");
+;
 
 module.exports = {
   async createProject(req, res) {
+    console.log(req.user);
+    
     try {
       const {
         projectName,
-        projectOwner,
-        assignedMembers,
         descriptions,
-        status,
       } = req.body;
+  
+      if (!req.user) {
+        return res.status(400).json({ message: "User not authenticated" });
+      }
+  
       const project = await Project.create({
         projectName,
-        projectOwner,
-        assignedMembers,
         descriptions,
-        status: status || "active",
+        ownerId: req.user.id, // Ensure req.User.id is available
       });
 
       return res.status(201).json({
@@ -32,9 +34,7 @@ module.exports = {
   // Read all projects
   async getAllProjects(req, res) {
     try {
-      const projects = await Project.findAll({
-        where: { status: "active" },
-      });
+      const projects = await Project.findAll();
 
       return res.status(200).json({ projects });
     } catch (error) {
@@ -50,7 +50,7 @@ module.exports = {
 
       const project = await Project.findByPk(id);
 
-      if (!project || project.status === "deleted") {
+      if (!project ) {
         return res.status(404).json({ message: "Project not found" });
       }
 
@@ -67,14 +67,14 @@ module.exports = {
       const { id } = req.params;
       const {
         projectName,
-        projectOwner,
-        assignedMembers,
+        // projectOwner,
+        // assignedMembers,
         descriptions,
         status,
       } = req.body;
 
       const [updatedRows] = await Project.update(
-        { projectName, projectOwner, assignedMembers, descriptions, status },
+        { projectName, descriptions },
         { where: { id } }
       );
 
@@ -125,8 +125,8 @@ module.exports = {
         return res.status(404).json({ message: "Project not found" });
       }
   
-      // Ensure assignedMembers is treated as an array, even if it's null or undefined
-      let assignedMembers = Array.isArray(project.assignedMembers) ? project.assignedMembers : []; // Default to empty array if not an array
+      // Ensure assignedMembers is an array, even if it's null or undefined
+      let assignedMembers = Array.isArray(project.assignedMembers) ? project.assignedMembers : [userId];
   
       // Check if userId is already assigned
       if (assignedMembers.includes(userId)) {
@@ -142,7 +142,8 @@ module.exports = {
       await project.update({ assignedMembers });
   
       return res.status(200).json({
-        message: "Project assigned successfully",
+        message: "User assigned to project successfully",
+        assignedMembers, // Return the updated assigned members list
         project,
       });
     } catch (error) {
@@ -151,4 +152,6 @@ module.exports = {
     }
   }
   
-};
+
+  
+ };

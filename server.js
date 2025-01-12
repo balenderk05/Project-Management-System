@@ -3,9 +3,10 @@ const dotenv =require ('dotenv')
 const morgan =require ('morgan')
 const cors =require ('cors')
 const helmet =require ('helmet')
-const connection = require('./config/db')
 const authRoute = require('./routes/userRoute')
 const projectRoute = require('./routes/projectRoute')
+const taskRoutes = require('./routes/taskRoute')
+const db =  require('./config/db')
 
 
 dotenv.config()
@@ -20,6 +21,7 @@ app.use(helmet())
 
 app.use("/api/users", authRoute)
 app.use("/api/user", projectRoute)
+app.use("/api/tasks", taskRoutes);
 
 const PORT = process.env.PORT 
 

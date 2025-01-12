@@ -1,12 +1,14 @@
 'use strict';
 const { Model } = require('sequelize');
+const { sequelize } = require('.');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // Define associations here if needed
+      User.belongsToMany(models.Project, { through: 'UserProject' });
     }
   }
+
   User.init(
     {
       firstname: {
@@ -32,5 +34,12 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'User',
     }
   );
+
   return User;
 };
+
+
+// module.exports = (sequelize) => {
+//   const UserProject = sequelize.define("UsersProject", {})
+//   return UserProject;
+// }

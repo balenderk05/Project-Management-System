@@ -13,9 +13,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      projectOwner: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      ownerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       assignedMembers: {
         type: Sequelize.JSON, // Corrected to use Sequelize.JSON
