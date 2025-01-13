@@ -100,7 +100,7 @@ module.exports = {
       const { id } = req.params;
 
       const [updatedRows] = await Project.update(
-        { status: "deleted" },
+        
         { where: { id } }
       );
 
