@@ -1,7 +1,6 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const config = require('./config');
-
+const config = require('../config/config');
 
 const environment = process.env.NODE_PROD
 
